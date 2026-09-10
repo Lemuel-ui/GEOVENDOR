@@ -1,102 +1,182 @@
--- =============================================================================
+-- ============================================================
 -- GeoVendor Database Schema
--- PostgreSQL 15+ with PostGIS 3.3+ extension
--- -----------------------------------------------------------------------------
--- This schema matches the data structures used by the prototype's dummy
--- data (includes/dummy_data.php). Connect the prototype to a real database
--- by implementing includes/db.php against these tables.
--- =============================================================================
+-- MySQL/MariaDB for XAMPP
+-- ============================================================
 
-CREATE EXTENSION IF NOT EXISTS postgis;
+-- ------------------------------------------------------------
+-- USERS
+-- MISU Administrator, BPLO Head Officer, BPLO Staff,
+-- Business Permit Inspector, Vendor
+-- ------------------------------------------------------------
 
--- ---------------------------------------------------------------------------
--- Users: MISU Administrator, BPLO Head Officer, BPLO Staff,
---        Business Permit Inspector, Vendor
--- ---------------------------------------------------------------------------
+CREATE DATABASE geovendor;
+USE geovendor;
+
 CREATE TABLE users (
-    user_id       SERIAL PRIMARY KEY,
-    full_name     VARCHAR(150) NOT NULL,
-    email         VARCHAR(150) UNIQUE NOT NULL,
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(150) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    role          VARCHAR(20) NOT NULL CHECK (role IN
-                    ('admin', 'bplo_staff', 'head_officer', 'inspector', 'vendor')),
-    is_active     BOOLEAN NOT NULL DEFAULT TRUE,
-    created_at    TIMESTAMP NOT NULL DEFAULT NOW()
+    role ENUM(
+        'admin',
+        'bplo_staff',
+        'head_officer',
+        'inspector',
+        'vendor'
+    ) NOT NULL,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- ---------------------------------------------------------------------------
--- Vendors: registered businesses with spatial location
--- ---------------------------------------------------------------------------
+-- ------------------------------------------------------------
+-- VENDORS
+-- Registered businesses with latitude and longitude
+-- ------------------------------------------------------------
+
 CREATE TABLE vendors (
-    vendor_id     SERIAL PRIMARY KEY,
+    vendor_id INT AUTO_INCREMENT PRIMARY KEY,
     business_name VARCHAR(150) NOT NULL,
-    owner_name    VARCHAR(150) NOT NULL,
-    category      VARCHAR(100),
-    barangay      VARCHAR(100) NOT NULL,
-    address       VARCHAR(255),
-    contact_no    VARCHAR(30),
-    location      GEOGRAPHY(POINT, 4326) NOT NULL, -- lat/lng pin from Leaflet.js
-    registered_by INTEGER REFERENCES users(user_id),
-    created_at    TIMESTAMP NOT NULL DEFAULT NOW()
+    owner_name VARCHAR(150) NOT NULL,
+    category VARCHAR(100),
+    barangay VARCHAR(100) NOT NULL,
+    address VARCHAR(255),
+    contact_no VARCHAR(30),
+
+    -- GIS coordinates for Leaflet/OpenStreetMap
+    latitude DECIMAL(10,7) NOT NULL,
+    longitude DECIMAL(10,7) NOT NULL,
+
+    registered_by INT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_vendor_user
+        FOREIGN KEY (registered_by)
+        REFERENCES users(user_id)
+        ON DELETE SET NULL
 );
 
-CREATE INDEX idx_vendors_location ON vendors USING GIST (location);
+CREATE INDEX idx_vendors_latitude ON vendors(latitude);
+CREATE INDEX idx_vendors_longitude ON vendors(longitude);
 
--- ---------------------------------------------------------------------------
--- Business Permits: one active/historical permit trail per vendor
--- ---------------------------------------------------------------------------
+-- ------------------------------------------------------------
+-- BUSINESS PERMITS
+-- ------------------------------------------------------------
+
 CREATE TABLE permits (
-    permit_id     SERIAL PRIMARY KEY,
-    vendor_id     INTEGER NOT NULL REFERENCES vendors(vendor_id) ON DELETE CASCADE,
-    permit_no     VARCHAR(50) UNIQUE NOT NULL,
-    issued_date   DATE NOT NULL,
-    expiry_date   DATE NOT NULL,
-    status        VARCHAR(20) NOT NULL DEFAULT 'active' CHECK (status IN
-                    ('active', 'expiring', 'expired', 'revoked')),
-    updated_at    TIMESTAMP NOT NULL DEFAULT NOW()
+    permit_id INT AUTO_INCREMENT PRIMARY KEY,
+
+    vendor_id INT NOT NULL,
+
+    permit_no VARCHAR(50) UNIQUE NOT NULL,
+    issued_date DATE NOT NULL,
+    expiry_date DATE NOT NULL,
+
+    status ENUM(
+        'active',
+        'expiring',
+        'expired',
+        'revoked'
+    ) NOT NULL DEFAULT 'active',
+
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_permit_vendor
+        FOREIGN KEY (vendor_id)
+        REFERENCES vendors(vendor_id)
+        ON DELETE CASCADE
 );
 
-CREATE INDEX idx_permits_expiry ON permits (expiry_date);
+CREATE INDEX idx_permits_expiry
+ON permits(expiry_date);
 
--- ---------------------------------------------------------------------------
--- Inspections: field visits performed by Business Permit Inspectors
--- ---------------------------------------------------------------------------
+-- ------------------------------------------------------------
+-- INSPECTIONS
+-- Field visits performed by Business Permit Inspectors
+-- ------------------------------------------------------------
+
 CREATE TABLE inspections (
-    inspection_id   SERIAL PRIMARY KEY,
-    vendor_id       INTEGER NOT NULL REFERENCES vendors(vendor_id) ON DELETE CASCADE,
-    inspector_id    INTEGER NOT NULL REFERENCES users(user_id),
-    scheduled_date  DATE NOT NULL,
-    status          VARCHAR(20) NOT NULL DEFAULT 'pending' CHECK (status IN
-                      ('pending', 'completed', 'flagged')),
-    remarks         TEXT,
-    completed_at    TIMESTAMP
+    inspection_id INT AUTO_INCREMENT PRIMARY KEY,
+
+    vendor_id INT NOT NULL,
+    inspector_id INT NOT NULL,
+
+    scheduled_date DATE NOT NULL,
+
+    status ENUM(
+        'pending',
+        'completed',
+        'flagged'
+    ) NOT NULL DEFAULT 'pending',
+
+    remarks TEXT,
+
+    completed_at DATETIME,
+
+    CONSTRAINT fk_inspection_vendor
+        FOREIGN KEY (vendor_id)
+        REFERENCES vendors(vendor_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_inspection_inspector
+        FOREIGN KEY (inspector_id)
+        REFERENCES users(user_id)
+        ON DELETE RESTRICT
 );
 
--- ---------------------------------------------------------------------------
--- Notifications: renewal reminders and system alerts
--- ---------------------------------------------------------------------------
+-- ------------------------------------------------------------
+-- NOTIFICATIONS
+-- Renewal reminders and system alerts
+-- ------------------------------------------------------------
+
 CREATE TABLE notifications (
-    notification_id SERIAL PRIMARY KEY,
-    user_id         INTEGER REFERENCES users(user_id),
-    permit_id       INTEGER REFERENCES permits(permit_id),
-    type            VARCHAR(20) NOT NULL CHECK (type IN
-                      ('info', 'success', 'warning', 'danger')),
-    message         TEXT NOT NULL,
-    is_read         BOOLEAN NOT NULL DEFAULT FALSE,
-    created_at      TIMESTAMP NOT NULL DEFAULT NOW()
+    notification_id INT AUTO_INCREMENT PRIMARY KEY,
+
+    user_id INT,
+    permit_id INT,
+
+    type ENUM(
+        'info',
+        'success',
+        'warning',
+        'danger'
+    ) NOT NULL,
+
+    message TEXT NOT NULL,
+
+    is_read TINYINT(1) NOT NULL DEFAULT 0,
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_notification_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_notification_permit
+        FOREIGN KEY (permit_id)
+        REFERENCES permits(permit_id)
+        ON DELETE CASCADE
 );
 
--- ---------------------------------------------------------------------------
--- System backups log (for the Administrator's Backup & Restore module)
--- ---------------------------------------------------------------------------
+-- ------------------------------------------------------------
+-- BACKUP LOGS
+-- Administrator's Backup & Restore module
+-- ------------------------------------------------------------
+
 CREATE TABLE backup_logs (
-    backup_id    SERIAL PRIMARY KEY,
-    file_path    VARCHAR(255) NOT NULL,
-    backup_type  VARCHAR(20) NOT NULL CHECK (backup_type IN ('automatic', 'manual')),
-    file_size_mb NUMERIC(10,2),
-    status       VARCHAR(20) NOT NULL DEFAULT 'completed',
-    created_at   TIMESTAMP NOT NULL DEFAULT NOW()
-);
+    backup_id INT AUTO_INCREMENT PRIMARY KEY,
 
--- Example spatial query: fetch vendors as GeoJSON for Leaflet.js
--- SELECT vendor_id, business_name, ST_AsGeoJSON(location) AS geom FROM vendors;
+    file_path VARCHAR(255) NOT NULL,
+
+    backup_type ENUM(
+        'automatic',
+        'manual'
+    ) NOT NULL,
+
+    file_size_mb DECIMAL(10,2),
+
+    status VARCHAR(20) NOT NULL DEFAULT 'completed',
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
