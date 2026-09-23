@@ -100,9 +100,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Log In</button>
             </form>
-
-            <div class="demo-accounts">
-                <div class="kicker">Demo accounts (prototype only)</div>
                 <table>
                     <tr><td class="role">Administrator</td><td>admin@manolofortich.gov.ph</td></tr>
                     <tr><td class="role">BPLO Staff</td><td>staff@manolofortich.gov.ph</td></tr>
@@ -110,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <tr><td class="role">Inspector</td><td>inspector@manolofortich.gov.ph</td></tr>
                     <tr><td class="role">Vendor</td><td>vendor@manolofortich.gov.ph</td></tr>
                 </table>
-                <p class="form-hint">Password for every demo account: <code>geovendor2026</code></p>
+                <p class="form-hint">Password for account: <code>geovendor2026</code></p>
             </div>
         </div>
     </div>
