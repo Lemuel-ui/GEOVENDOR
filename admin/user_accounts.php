@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../includes/auth_check.php';
 require_role(['admin']);
+<<<<<<< HEAD
 require_once __DIR__ . '/../includes/functions.php';
 
 $pdo = get_db();
@@ -40,6 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $users = get_all_users($pdo);
+=======
+require_once __DIR__ . '/../includes/dummy_data.php';
+
+$pageTitle = 'User Accounts';
+$activePage = 'accounts';
+$created = isset($_POST['create_account']);
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
 include __DIR__ . '/../components/head_open.php';
 ?>
 <div class="page-head">
@@ -49,9 +57,15 @@ include __DIR__ . '/../components/head_open.php';
     </div>
 </div>
 
+<<<<<<< HEAD
 <?php if ($message): ?>
     <div class="card" style="border-left:4px solid var(--color-<?php echo $messageType; ?>); margin-bottom:1.25rem;">
         <div class="card-body"><?php echo htmlspecialchars($message); ?></div>
+=======
+<?php if ($created): ?>
+    <div class="card" style="border-left:4px solid var(--color-success); margin-bottom:1.25rem;">
+        <div class="card-body">Account for <strong><?php echo htmlspecialchars($_POST['full_name'] ?? ''); ?></strong> was created. (Prototype only — no data was written.)</div>
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
     </div>
 <?php endif; ?>
 
@@ -62,6 +76,7 @@ include __DIR__ . '/../components/head_open.php';
             <table class="gv-table">
                 <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
                 <tbody>
+<<<<<<< HEAD
                 <?php foreach ($users as $u): ?>
                     <tr>
                         <td><strong><?php echo htmlspecialchars($u['full_name']); ?></strong></td>
@@ -76,6 +91,17 @@ include __DIR__ . '/../components/head_open.php';
                                     <?php echo $u['is_active'] ? 'Deactivate' : 'Reactivate'; ?>
                                 </button>
                             </form>
+=======
+                <?php foreach ($DUMMY_USERS as $email => $u): ?>
+                    <tr>
+                        <td><strong><?php echo htmlspecialchars($u['name']); ?></strong></td>
+                        <td class="mono"><?php echo htmlspecialchars($email); ?></td>
+                        <td><span class="badge-soft"><?php echo htmlspecialchars(ROLE_LABELS[$u['role']]); ?></span></td>
+                        <td><span class="pin-status active">Active</span></td>
+                        <td>
+                            <button class="btn btn-outline btn-sm">Edit</button>
+                            <button class="btn btn-danger-outline btn-sm" onclick="return gvConfirmDelete('Deactivate this account?');">Deactivate</button>
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -97,10 +123,13 @@ include __DIR__ . '/../components/head_open.php';
                     <input class="form-control" type="email" id="email" name="email" required>
                 </div>
                 <div class="form-group">
+<<<<<<< HEAD
                     <label class="form-label" for="password">Temporary Password</label>
                     <input class="form-control" type="password" id="password" name="password" minlength="6" required>
                 </div>
                 <div class="form-group">
+=======
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
                     <label class="form-label" for="role">Assign Role</label>
                     <select class="form-control" id="role" name="role">
                         <option value="bplo_staff">BPLO Staff</option>

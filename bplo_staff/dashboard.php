@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../includes/auth_check.php';
 require_role(['bplo_staff']);
+<<<<<<< HEAD
 require_once __DIR__ . '/../includes/functions.php';
 
 $pdo = get_db();
@@ -9,6 +10,13 @@ $activePage = 'dashboard';
 $vendors = get_all_vendors($pdo);
 $counts = get_permit_counts($vendors);
 $notifications = get_notifications($pdo, 4);
+=======
+require_once __DIR__ . '/../includes/dummy_data.php';
+
+$pageTitle = 'Dashboard';
+$activePage = 'dashboard';
+$counts = get_permit_counts($DUMMY_VENDORS);
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
 include __DIR__ . '/../components/head_open.php';
 ?>
 <div class="page-head">
@@ -25,7 +33,11 @@ include __DIR__ . '/../components/head_open.php';
 <div class="stat-grid">
     <div class="stat-card" style="--stat-color:var(--color-primary);">
         <div class="stat-label">Total Vendors</div>
+<<<<<<< HEAD
         <div class="stat-value"><?php echo count($vendors); ?></div>
+=======
+        <div class="stat-value"><?php echo count($DUMMY_VENDORS); ?></div>
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
         <div class="stat-sub">Registered in Manolo Fortich</div>
     </div>
     <div class="stat-card" style="--stat-color:var(--color-success);">
@@ -57,7 +69,11 @@ include __DIR__ . '/../components/head_open.php';
                     <tr><th>Vendor</th><th>Barangay</th><th>Permit No.</th><th>Expiry</th><th>Status</th></tr>
                 </thead>
                 <tbody>
+<<<<<<< HEAD
                 <?php foreach ($vendors as $v): if ($v['permit_status'] === 'active') continue; ?>
+=======
+                <?php foreach ($DUMMY_VENDORS as $v): if ($v['permit_status'] === 'active') continue; ?>
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
                     <tr>
                         <td><strong><?php echo htmlspecialchars($v['name']); ?></strong></td>
                         <td><?php echo htmlspecialchars($v['barangay']); ?></td>
@@ -74,7 +90,11 @@ include __DIR__ . '/../components/head_open.php';
     <div class="card">
         <div class="card-header"><h3>Recent Notifications</h3></div>
         <div>
+<<<<<<< HEAD
             <?php foreach ($notifications as $n): ?>
+=======
+            <?php foreach (array_slice($DUMMY_NOTIFICATIONS, 0, 4) as $n): ?>
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
                 <div class="notif-item">
                     <span class="notif-dot <?php echo $n['type']; ?>"></span>
                     <div>

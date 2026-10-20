@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../includes/auth_check.php';
 require_role(['inspector']);
+<<<<<<< HEAD
 require_once __DIR__ . '/../includes/functions.php';
 
 $pdo = get_db();
@@ -38,18 +39,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_inspection_id'
 }
 
 $myInspections = get_inspections_for_inspector($pdo, (int)$_SESSION['user_id']);
+=======
+require_once __DIR__ . '/../includes/dummy_data.php';
+
+$pageTitle = 'Inspection Management';
+$activePage = 'inspections';
+$updated = isset($_POST['update_inspection_id']);
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
 include __DIR__ . '/../components/head_open.php';
 ?>
 <div class="page-head">
     <div>
         <h1>Inspection Management</h1>
+<<<<<<< HEAD
         <p>Update the results of your field inspections, add remarks, and attach photos.</p>
+=======
+        <p>Update the results of your field inspections.</p>
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
     </div>
 </div>
 
 <?php if ($updated): ?>
     <div class="card" style="border-left:4px solid var(--color-success); margin-bottom:1.25rem;">
+<<<<<<< HEAD
         <div class="card-body">Inspection <strong class="mono"><?php echo htmlspecialchars($_POST['inspection_label'] ?? ''); ?></strong> was updated to "<?php echo htmlspecialchars($_POST['new_status'] ?? ''); ?>".<?php if ($error) echo ' ' . htmlspecialchars($error); ?></div>
+=======
+        <div class="card-body">Inspection <strong class="mono"><?php echo htmlspecialchars($_POST['update_inspection_id']); ?></strong> was updated to "<?php echo htmlspecialchars($_POST['new_status'] ?? ''); ?>". (Prototype only.)</div>
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
     </div>
 <?php endif; ?>
 
@@ -57,14 +73,21 @@ include __DIR__ . '/../components/head_open.php';
     <div class="card-header"><h3>Assigned Inspections</h3></div>
     <div class="card-body" style="padding:0;">
         <table class="gv-table">
+<<<<<<< HEAD
             <thead><tr><th>Inspection ID</th><th>Vendor</th><th>Barangay</th><th>Scheduled</th><th>Status</th><th>Findings &amp; Photo</th></tr></thead>
             <tbody>
             <?php foreach ($myInspections as $ins): ?>
+=======
+            <thead><tr><th>Inspection ID</th><th>Vendor</th><th>Barangay</th><th>Scheduled</th><th>Status</th><th>Update</th></tr></thead>
+            <tbody>
+            <?php foreach ($DUMMY_INSPECTIONS as $ins): ?>
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
                 <tr>
                     <td class="mono"><?php echo htmlspecialchars($ins['id']); ?></td>
                     <td><strong><?php echo htmlspecialchars($ins['vendor']); ?></strong></td>
                     <td><?php echo htmlspecialchars($ins['barangay']); ?></td>
                     <td><?php echo htmlspecialchars($ins['scheduled']); ?></td>
+<<<<<<< HEAD
                     <td><span class="pin-status <?php echo $ins['status']; ?>"><?php echo htmlspecialchars($ins['status_label']); ?></span></td>
                     <td>
                         <?php if ($ins['status'] === 'pending'): ?>
@@ -91,11 +114,29 @@ include __DIR__ . '/../components/head_open.php';
                                     <?php endforeach; ?>
                                 </div>
                             <?php endif; ?>
+=======
+                    <td><span class="pin-status <?php echo strtolower($ins['status']); ?>"><?php echo htmlspecialchars($ins['status']); ?></span></td>
+                    <td>
+                        <?php if ($ins['status'] === 'Pending'): ?>
+                        <form method="POST" style="display:flex;gap:.4rem;">
+                            <input type="hidden" name="update_inspection_id" value="<?php echo htmlspecialchars($ins['id']); ?>">
+                            <select name="new_status" class="form-control btn-sm" style="max-width:150px;">
+                                <option>Completed</option>
+                                <option>Flagged for Review</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                        </form>
+                        <?php else: ?>
+                            <span class="badge-soft">No action needed</span>
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
                         <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
+<<<<<<< HEAD
             <?php if (!$myInspections): ?><tr><td colspan="6" style="text-align:center;color:var(--color-text-muted);">No inspections assigned yet.</td></tr><?php endif; ?>
+=======
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
             </tbody>
         </table>
     </div>

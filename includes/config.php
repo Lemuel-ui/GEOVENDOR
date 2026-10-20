@@ -3,8 +3,14 @@
  * config.php
  * -----------------------------------------------------------------------
  * Central configuration file for GeoVendor.
+<<<<<<< HEAD
  * Starts the session, defines BASE_URL, role labels/home pages, and the
  * MySQL/MariaDB (XAMPP) database credentials used by includes/db.php.
+=======
+ * In production this would hold DB credentials pulled from environment
+ * variables. For this prototype we only start the session and define
+ * a BASE_URL constant so links/assets work regardless of folder depth.
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
  * -----------------------------------------------------------------------
  */
 
@@ -16,6 +22,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // e.g. http://localhost/GeoVendor
 define('BASE_URL', '/GeoVendor');
 
+<<<<<<< HEAD
 // ---------------------------------------------------------------------------
 // Database connection settings (XAMPP defaults: host=localhost, user=root,
 // empty password, default MySQL port 3306). Update if your XAMPP MySQL
@@ -32,6 +39,8 @@ define('DB_CHARSET', 'utf8mb4');
 define('UPLOAD_DIR', __DIR__ . '/../uploads/inspections/');
 define('UPLOAD_URL', BASE_URL . '/uploads/inspections/');
 
+=======
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
 // Human-readable labels for each role stored in $_SESSION['role']
 define('ROLE_LABELS', [
     'admin'        => 'MISU Administrator',

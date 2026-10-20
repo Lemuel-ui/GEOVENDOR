@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../includes/auth_check.php';
 require_role(['bplo_staff']);
+<<<<<<< HEAD
 require_once __DIR__ . '/../includes/functions.php';
 
 $pdo = get_db();
@@ -39,6 +40,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_registration']
 }
 
 $vendors = get_all_vendors($pdo);
+=======
+require_once __DIR__ . '/../includes/dummy_data.php';
+
+$pageTitle = 'Vendor Registration';
+$activePage = 'register';
+$saved = isset($_POST['submit_registration']);
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
 include __DIR__ . '/../components/head_open.php';
 ?>
 <div class="page-head">
@@ -52,6 +60,7 @@ include __DIR__ . '/../components/head_open.php';
     <div class="card" style="border-left:4px solid var(--color-success); margin-bottom:1.25rem;">
         <div class="card-body" style="display:flex; align-items:center; gap:.75rem;">
             <span class="pin-status active">Saved</span>
+<<<<<<< HEAD
             <span>Vendor "<strong><?php echo htmlspecialchars($_POST['business_name'] ?? ''); ?></strong>" was registered successfully and written to the database.</span>
         </div>
     </div>
@@ -59,6 +68,11 @@ include __DIR__ . '/../components/head_open.php';
     <div class="card" style="border-left:4px solid var(--color-danger); margin-bottom:1.25rem;">
         <div class="card-body"><?php echo htmlspecialchars($error); ?></div>
     </div>
+=======
+            <span>Vendor "<strong><?php echo htmlspecialchars($_POST['business_name'] ?? ''); ?></strong>" was registered successfully. (Prototype only — no data was written to a database.)</span>
+        </div>
+    </div>
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
 <?php endif; ?>
 
 <div class="row" style="display:grid;grid-template-columns:1fr 1.1fr;gap:1.25rem;align-items:start;">
@@ -120,15 +134,24 @@ include __DIR__ . '/../components/head_open.php';
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="lat">Latitude</label>
+<<<<<<< HEAD
                         <input class="form-control mono" id="lat" name="lat" placeholder="8.3706" readonly required>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="lng">Longitude</label>
                         <input class="form-control mono" id="lng" name="lng" placeholder="124.8681" readonly required>
+=======
+                        <input class="form-control mono" id="lat" name="lat" placeholder="8.3706" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="lng">Longitude</label>
+                        <input class="form-control mono" id="lng" name="lng" placeholder="124.8681" readonly>
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
                     </div>
                 </div>
                 <p class="form-hint" style="margin-top:-.5rem;margin-bottom:1rem;">Click anywhere on the map to drop a pin at the vendor's exact location.</p>
 
+<<<<<<< HEAD
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="permit_no">Initial Business Permit No.</label>
@@ -138,6 +161,11 @@ include __DIR__ . '/../components/head_open.php';
                         <label class="form-label" for="expiry_date">Permit Expiry Date</label>
                         <input class="form-control" type="date" id="expiry_date" name="expiry_date" value="<?php echo date('Y-m-d', strtotime('+1 year')); ?>">
                     </div>
+=======
+                <div class="form-group">
+                    <label class="form-label" for="permit_no">Initial Business Permit No.</label>
+                    <input class="form-control mono" id="permit_no" name="permit_no" placeholder="BP-2026-XXXX">
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
                 </div>
 
                 <button type="submit" name="submit_registration" class="btn btn-primary" style="width:100%;justify-content:center;">Save Vendor Record</button>
@@ -162,7 +190,11 @@ include __DIR__ . '/../components/head_open.php';
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/js/map.js"></script>
 <script>
+<<<<<<< HEAD
     var existingVendors = <?php echo json_encode($vendors); ?>;
+=======
+    var existingVendors = <?php echo json_encode($DUMMY_VENDORS); ?>;
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
     var mapHandle = initGeoVendorMap('gis-map', existingVendors);
 
     // Registration-specific behaviour: clicking the map drops a draft pin

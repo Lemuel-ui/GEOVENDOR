@@ -1,12 +1,19 @@
 <?php
 require_once __DIR__ . '/../includes/auth_check.php';
 require_role(['bplo_staff']);
+<<<<<<< HEAD
 require_once __DIR__ . '/../includes/functions.php';
 
 $pdo = get_db();
 $pageTitle = 'Vendor Map (GIS)';
 $activePage = 'gis_map';
 $vendors = get_all_vendors($pdo);
+=======
+require_once __DIR__ . '/../includes/dummy_data.php';
+
+$pageTitle = 'Vendor Map (GIS)';
+$activePage = 'gis_map';
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
 include __DIR__ . '/../components/head_open.php';
 ?>
 <div class="page-head">
@@ -36,7 +43,11 @@ include __DIR__ . '/../components/head_open.php';
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/js/map.js"></script>
 <script>
+<<<<<<< HEAD
     var vendors = <?php echo json_encode($vendors); ?>;
+=======
+    var vendors = <?php echo json_encode($DUMMY_VENDORS); ?>;
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
     var mapHandle = initGeoVendorMap('gis-map', vendors);
 
     document.getElementById('mapSearch').addEventListener('input', function (e) {

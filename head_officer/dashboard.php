@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../includes/auth_check.php';
 require_role(['head_officer']);
+<<<<<<< HEAD
 require_once __DIR__ . '/../includes/functions.php';
 
 $pdo = get_db();
@@ -10,6 +11,14 @@ $vendors = get_all_vendors($pdo);
 $counts = get_permit_counts($vendors);
 $inspections = get_all_inspections($pdo);
 $pendingInspections = array_filter($inspections, fn($i) => $i['status'] === 'pending');
+=======
+require_once __DIR__ . '/../includes/dummy_data.php';
+
+$pageTitle = 'Dashboard';
+$activePage = 'dashboard';
+$counts = get_permit_counts($DUMMY_VENDORS);
+$pendingInspections = array_filter($DUMMY_INSPECTIONS, fn($i) => $i['status'] === 'Pending');
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
 include __DIR__ . '/../components/head_open.php';
 ?>
 <div class="page-head">
@@ -22,12 +31,20 @@ include __DIR__ . '/../components/head_open.php';
 <div class="stat-grid">
     <div class="stat-card" style="--stat-color:var(--color-primary);">
         <div class="stat-label">Total Vendors</div>
+<<<<<<< HEAD
         <div class="stat-value"><?php echo count($vendors); ?></div>
+=======
+        <div class="stat-value"><?php echo count($DUMMY_VENDORS); ?></div>
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
         <div class="stat-sub">Across all barangays</div>
     </div>
     <div class="stat-card" style="--stat-color:var(--color-success);">
         <div class="stat-label">Compliance Rate</div>
+<<<<<<< HEAD
         <div class="stat-value"><?php echo count($vendors) ? round(($counts['active'] / count($vendors)) * 100) : 0; ?>%</div>
+=======
+        <div class="stat-value"><?php echo round(($counts['active'] / count($DUMMY_VENDORS)) * 100); ?>%</div>
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
         <div class="stat-sub">Vendors with active permits</div>
     </div>
     <div class="stat-card" style="--stat-color:var(--color-accent);">
@@ -54,7 +71,11 @@ include __DIR__ . '/../components/head_open.php';
                 <tbody>
                 <?php
                 $byBarangay = [];
+<<<<<<< HEAD
                 foreach ($vendors as $v) {
+=======
+                foreach ($DUMMY_VENDORS as $v) {
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
                     $byBarangay[$v['barangay']]['total'] = ($byBarangay[$v['barangay']]['total'] ?? 0) + 1;
                     $byBarangay[$v['barangay']][$v['permit_status']] = ($byBarangay[$v['barangay']][$v['permit_status']] ?? 0) + 1;
                 }
@@ -75,11 +96,19 @@ include __DIR__ . '/../components/head_open.php';
     <div class="card">
         <div class="card-header"><h3>Recent Inspection Reports</h3></div>
         <div>
+<<<<<<< HEAD
             <?php foreach (array_slice($inspections, 0, 4) as $ins): ?>
                 <div class="notif-item">
                     <span class="notif-dot <?php echo $ins['status'] === 'completed' ? 'success' : ($ins['status'] === 'flagged' ? 'danger' : 'info'); ?>"></span>
                     <div>
                         <div class="notif-text"><strong><?php echo htmlspecialchars($ins['vendor']); ?></strong> &mdash; <?php echo htmlspecialchars($ins['status_label']); ?></div>
+=======
+            <?php foreach (array_slice($DUMMY_INSPECTIONS, 0, 4) as $ins): ?>
+                <div class="notif-item">
+                    <span class="notif-dot <?php echo $ins['status'] === 'Completed' ? 'success' : 'info'; ?>"></span>
+                    <div>
+                        <div class="notif-text"><strong><?php echo htmlspecialchars($ins['vendor']); ?></strong> &mdash; <?php echo htmlspecialchars($ins['status']); ?></div>
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
                         <div class="notif-time">Scheduled <?php echo htmlspecialchars($ins['scheduled']); ?> &middot; Brgy. <?php echo htmlspecialchars($ins['barangay']); ?></div>
                     </div>
                 </div>

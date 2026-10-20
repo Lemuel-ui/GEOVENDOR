@@ -1,12 +1,19 @@
 <?php
 require_once __DIR__ . '/../includes/auth_check.php';
 require_role(['head_officer']);
+<<<<<<< HEAD
 require_once __DIR__ . '/../includes/functions.php';
 
 $pdo = get_db();
 $pageTitle = 'Permit Monitoring';
 $activePage = 'permits';
 $vendors = get_all_vendors($pdo);
+=======
+require_once __DIR__ . '/../includes/dummy_data.php';
+
+$pageTitle = 'Permit Monitoring';
+$activePage = 'permits';
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
 include __DIR__ . '/../components/head_open.php';
 ?>
 <div class="page-head">
@@ -33,7 +40,11 @@ include __DIR__ . '/../components/head_open.php';
                 <tr><th>Permit No.</th><th>Vendor</th><th>Barangay</th><th>Category</th><th>Expiry</th><th>Status</th></tr>
             </thead>
             <tbody>
+<<<<<<< HEAD
             <?php foreach ($vendors as $v): ?>
+=======
+            <?php foreach ($DUMMY_VENDORS as $v): ?>
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
                 <tr data-name="<?php echo strtolower($v['name']); ?>" data-barangay="<?php echo strtolower($v['barangay']); ?>" data-status="<?php echo $v['permit_status']; ?>">
                     <td class="mono"><?php echo htmlspecialchars($v['permit_no']); ?></td>
                     <td><strong><?php echo htmlspecialchars($v['name']); ?></strong></td>

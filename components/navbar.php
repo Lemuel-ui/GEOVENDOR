@@ -5,11 +5,17 @@
  * Renders the sticky top bar. Expects the including page to have set:
  *   $pageTitle        (string) shown on the left of the topbar
  * Reads $_SESSION['name'] / $_SESSION['role'] for the user chip and
+<<<<<<< HEAD
  * queries the `notifications` table (via includes/functions.php) for the
  * bell dropdown count.
  * -----------------------------------------------------------------------
  */
 require_once __DIR__ . '/../includes/functions.php';
+=======
+ * $DUMMY_NOTIFICATIONS (from dummy_data.php) for the bell dropdown count.
+ * -----------------------------------------------------------------------
+ */
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
 
 $userName = $_SESSION['name'] ?? 'Guest User';
 $roleKey  = $_SESSION['role'] ?? 'vendor';
@@ -18,7 +24,11 @@ foreach (explode(' ', $userName) as $part) {
     $initials .= strtoupper(substr($part, 0, 1));
 }
 $initials = substr($initials, 0, 2);
+<<<<<<< HEAD
 $notifCount = count_notifications(get_db());
+=======
+$notifCount = isset($DUMMY_NOTIFICATIONS) ? count($DUMMY_NOTIFICATIONS) : 0;
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
 ?>
 <header class="topbar">
     <div style="display:flex;align-items:center;gap:.9rem;">

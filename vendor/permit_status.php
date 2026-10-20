@@ -1,12 +1,20 @@
 <?php
 require_once __DIR__ . '/../includes/auth_check.php';
 require_role(['vendor']);
+<<<<<<< HEAD
 require_once __DIR__ . '/../includes/functions.php';
 
 $pdo = get_db();
 $pageTitle = 'Permit Status';
 $activePage = 'permit';
 $myBusiness = get_vendor_for_user($pdo, (int)$_SESSION['user_id']);
+=======
+require_once __DIR__ . '/../includes/dummy_data.php';
+
+$pageTitle = 'Permit Status';
+$activePage = 'permit';
+$myBusiness = $DUMMY_VENDORS[0];
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
 include __DIR__ . '/../components/head_open.php';
 ?>
 <div class="page-head">
@@ -16,9 +24,12 @@ include __DIR__ . '/../components/head_open.php';
     </div>
 </div>
 
+<<<<<<< HEAD
 <?php if (!$myBusiness): ?>
     <div class="card"><div class="card-body">No business record is linked to your account yet. Please visit the BPLO office.</div></div>
 <?php else: ?>
+=======
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
 <div class="card">
     <div class="card-header"><h3><?php echo htmlspecialchars($myBusiness['name']); ?></h3></div>
     <div class="card-body">
@@ -36,6 +47,9 @@ include __DIR__ . '/../components/head_open.php';
         </div>
     </div>
 </div>
+<<<<<<< HEAD
 <?php endif; ?>
+=======
+>>>>>>> 657f04eb7ee59654ac1e196f78d0751cdb126d22
 
 <?php include __DIR__ . '/../components/footer.php'; ?>
